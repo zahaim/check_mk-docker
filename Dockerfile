@@ -25,6 +25,6 @@ RUN omd create $SITE --no-init -umonitoring -gmonitoring && \
 
 USER monitoring
 
-EXPOSE 80
+EXPOSE 80 5000
 
-ENTRYPOINT omd update; omd start; while /bin/true ; do sleep 1 ; done
+ENTRYPOINT omd start; while /bin/true ; do sleep 1 ; done
