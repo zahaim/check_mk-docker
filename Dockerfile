@@ -25,6 +25,11 @@ RUN omd create $SITE --no-init -umonitoring -gmonitoring && \
 
 USER monitoring
 
-EXPOSE 80 5000
+COPY ./docker-entrypoint.sh /
 
-ENTRYPOINT omd start; while /bin/true ; do sleep 1 ; done
+EXPOSE 5000
+
+WORKDIR /omd/sites/$SITE
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["start"]
