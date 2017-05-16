@@ -21,13 +21,15 @@ ENV SITE monitoring
 RUN omd create $SITE --no-init -umonitoring -gmonitoring && \
     omd config $SITE set TMPFS off && \
     omd config $SITE set DEFAULT_GUI check_mk && \
-    omd config $SITE set APACHE_TCP_ADDR 0.0.0.0
+    omd config $SITE set APACHE_TCP_ADDR 0.0.0.0 && \
+    omd config $SITE set LIVESTATUS_TCP on && \
+    omd config $SITE set LIVESTATUS_TCP_PORT 6557
 
 USER monitoring
 
 COPY ./docker-entrypoint.sh /
 
-EXPOSE 5000
+EXPOSE 5000 6556 6557
 
 WORKDIR /omd/sites/$SITE
 
