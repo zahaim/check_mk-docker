@@ -8,7 +8,8 @@ ENV URL https://mathias-kettner.de/support/${VERSION}
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       wget \
-      gdebi \
+      vim \
+      telnet \
     && rm -rf /var/lib/apt/lists/*
 
 RUN wget --quiet --no-check-certificate $URL/$PACKAGE && \
@@ -25,7 +26,9 @@ RUN omd create $SITE --no-init -umonitoring -gmonitoring && \
     omd config $SITE set LIVESTATUS_TCP on && \
     omd config $SITE set LIVESTATUS_TCP_PORT 6557
 
-USER monitoring
+RUN dpkg -i /opt/omd/versions/${VERSION}.cre/share/check_mk/agents/check-mk-agent_${VERSION}-1_all.deb ; \
+  apt-get update && \
+  apt-get -f -y install
 
 COPY ./docker-entrypoint.sh /
 
