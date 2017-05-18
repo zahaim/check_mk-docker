@@ -17,15 +17,6 @@ RUN wget --quiet --no-check-certificate $URL/$PACKAGE && \
     apt-get update && \
     apt-get -f -y install
 
-ENV SITE monitoring
-
-RUN omd create $SITE --no-init -umonitoring -gmonitoring && \
-    omd config $SITE set TMPFS off && \
-    omd config $SITE set DEFAULT_GUI check_mk && \
-    omd config $SITE set APACHE_TCP_ADDR 0.0.0.0 && \
-    omd config $SITE set LIVESTATUS_TCP on && \
-    omd config $SITE set LIVESTATUS_TCP_PORT 6557
-
 RUN dpkg -i /opt/omd/versions/${VERSION}.cre/share/check_mk/agents/check-mk-agent_${VERSION}-1_all.deb ; \
   apt-get update && \
   apt-get -f -y install
@@ -34,7 +25,7 @@ COPY ./docker-entrypoint.sh /
 
 EXPOSE 5000 6556 6557
 
-WORKDIR /omd/sites/$SITE
+WORKDIR /omd/sites
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["start"]
